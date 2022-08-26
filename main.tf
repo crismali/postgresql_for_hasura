@@ -22,7 +22,6 @@ resource "aws_security_group" "security_group" {
   }
 }
 
-
 resource "aws_rds_cluster" "cluster" {
   cluster_identifier     = var.cluster_identifier
   engine                 = "aurora-postgresql"
