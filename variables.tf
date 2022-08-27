@@ -7,8 +7,8 @@ variable "apply_immediately" {
 
 variable "cluster_identifier" {
   description = "The RDS Cluster Identifier. Will use generated label ID if not supplied"
-  default     = ""
-  nullable    = false
+  default     = null
+  nullable    = true
   type        = string
 }
 
@@ -47,8 +47,8 @@ variable "hasura_ip_address" {
 
 variable "instance_identifier" {
   description = "The RDS Instance Identifier. Will use generated label ID if not supplied"
-  default     = ""
-  nullable    = false
+  default     = null
+  nullable    = true
   type        = string
 }
 
