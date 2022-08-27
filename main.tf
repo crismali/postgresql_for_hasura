@@ -6,7 +6,7 @@ resource "aws_security_group" "security_group" {
   name        = var.security_group_name
   description = "A security group made for a Hasura Postgresql cluster"
   vpc_id      = var.vpc_id
-  tags        = [local.tag]
+  tags        = { created_by = local.tag }
 
   ingress {
     description      = "Only allow connections from Hasura project"
@@ -36,7 +36,7 @@ resource "aws_rds_cluster" "cluster" {
   engine_version         = var.engine_version
   master_password        = var.database_password
   master_username        = var.database_username
-  tags                   = [local.tag]
+  tags                   = { created_by = local.tag }
   vpc_security_group_ids = [aws_security_group.security_group.id]
 
   serverlessv2_scaling_configuration {
@@ -53,5 +53,5 @@ resource "aws_rds_cluster_instance" "instance" {
   identifier          = var.instance_identifier
   instance_class      = "db.serverless"
   publicly_accessible = true
-  tags                = [local.tag]
+  tags                = { created_by = local.tag }
 }
