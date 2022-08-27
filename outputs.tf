@@ -1,7 +1,7 @@
 output "postgresql_for_hasura_database_endpoint" {
   description = "The database cluster endpoint."
   sensitive   = false
-  value       = module.aws_rds_cluster.cluster.endpoint
+  value       = aws_rds_cluster.cluster.endpoint
 }
 
 output "postgresql_for_hasura_database_url" {
