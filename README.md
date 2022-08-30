@@ -6,15 +6,57 @@ With more jargon: A Terraform module for setting up Aurora Serverless PostgreSQL
 
 ## Use
 
-TBD.
+All you need is
 
-### Variables
+- your Hasura project's IP address
+- whatever you'd like your database password to be
+- the AWS VPC ID you'd like your database to live in
 
-TBD.
+Check out this example:
 
-### Outputs
+```
+# Set up our providers
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.0"
+    }
+  }
+}
 
-TBD.
+provider "aws" {
+  region = "us-west-1"
+}
+
+# Here we're just grabbing the default VPC for our AWS account
+resource "aws_default_vpc" "default" {
+
+}
+
+# Use the module
+module "postgresql-for-hasura" {
+  source  = "crismali/postgresql-for-hasura/aws"
+  version = "~> 0.0.6"
+
+  # This will be the password to our database and should probably be kept secret
+  database_password = var.database_password # ie "some-password-for-the-database"
+
+  # This is where we pass in the IP address of our Hasura project.
+  # Without this Hasura won't be able to connect to the database.
+  hasura_ip_address = "0.0.0.0/32"
+
+  # The ID of our preferred VPC. Here we're grabbing the ID of our AWS account's default VPC.
+  vpc_id = aws_default_vpc.default.id
+}
+
+# Not required but convenient.
+# `terraform output -raw endpoint | pbcopy` to copy your database URL so you can just paste it into Hasura.
+output "endpoint" {
+  sensitive = true
+  value     = module.postgresql-for-hasura.postgresql_for_hasura_database_url
+}
+```
 
 ## Resources
 
